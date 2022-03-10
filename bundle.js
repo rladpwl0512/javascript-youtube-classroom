@@ -3203,12 +3203,12 @@ var __webpack_exports__ = {};
   \*************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/index.css */ "./src/css/index.css");
-/* harmony import */ var _Controller_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Controller.js */ "./src/js/Controller.js");
-/* harmony import */ var _assets_images_not_found_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/images/not_found.png */ "./src/assets/images/not_found.png");
+/* harmony import */ var _assets_images_not_found_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/images/not_found.png */ "./src/assets/images/not_found.png");
+/* harmony import */ var _Controller_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Controller.js */ "./src/js/Controller.js");
 
 
 
-window.addEventListener('DOMContentLoaded', new _Controller_js__WEBPACK_IMPORTED_MODULE_1__["default"]());
+window.addEventListener('DOMContentLoaded', new _Controller_js__WEBPACK_IMPORTED_MODULE_2__["default"]());
 })();
 
 /******/ })()
