@@ -918,7 +918,7 @@ var Video = /*#__PURE__*/function () {
               case 0:
                 _context.prev = 0;
                 // const ORIGINAL_HOST = "https://www.googleapis.com"; // 기존 유튜브 API 호스트
-                REDIRECT_SERVER_HOST = 'https://zealous-swartz-f699df.netlify.app/'; // my own redirect server hostname
+                REDIRECT_SERVER_HOST = 'https://festive-pare-09e68a.netlify.app/'; // my own redirect server hostname
 
                 url = new URL('youtube/v3/search', REDIRECT_SERVER_HOST);
                 parameters = new URLSearchParams({
