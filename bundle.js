@@ -216,27 +216,28 @@ function _scrollNextVideos3() {
             return this.video.fetchYoutubeApi(this.video.keyword, this.video.nextPageToken);
 
           case 11:
+            _context2.prev = 11;
             this.video.setVideoInfo();
-            this.video.accumulateVideoItems();
-            this.video.updateNewVideoItems();
+            _context2.next = 18;
+            break;
 
-            if (!(this.video.newVideoItems.length < _constants_video_js__WEBPACK_IMPORTED_MODULE_10__["default"].MINIMUM_FETCHED_VIDEO_COUNT)) {
-              _context2.next = 16;
-              break;
-            }
-
+          case 15:
+            _context2.prev = 15;
+            _context2.t1 = _context2["catch"](11);
             return _context2.abrupt("return");
 
-          case 16:
+          case 18:
+            this.video.accumulateVideoItems();
+            this.video.updateNewVideoItems();
             this.searchResultView.renderVideo(this.video.newVideoItems);
             this.searchResultView.startObserve();
 
-          case 18:
+          case 22:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[1, 5]]);
+    }, _callee2, this, [[1, 5], [11, 15]]);
   }));
   return _scrollNextVideos3.apply(this, arguments);
 }
