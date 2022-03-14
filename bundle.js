@@ -74,8 +74,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dummy/dummyObject.js */ "./src/js/dummy/dummyObject.js");
 /* harmony import */ var _models_Video_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./models/Video.js */ "./src/js/models/Video.js");
 /* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/event.js */ "./src/js/utils/event.js");
-/* harmony import */ var _constants_video_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../constants/video.js */ "./src/constants/video.js");
-/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/validator.js */ "./src/js/utils/validator.js");
 
 
 
@@ -86,7 +85,6 @@ function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclarati
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
 function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
-
 
 
 
@@ -201,7 +199,7 @@ function _scrollNextVideos3() {
           case 0:
             this.searchResultView.stopObserve();
             _context2.prev = 1;
-            (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_11__.checkVideoIsNone)();
+            (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_10__.checkVideoIsNone)();
             _context2.next = 8;
             break;
 
@@ -244,7 +242,7 @@ function _scrollNextVideos3() {
 
 function _saveVideo2(event) {
   try {
-    (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_11__.checkExceedLimit)(this.video.savedVideoItems);
+    (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_10__.checkExceedLimit)(this.video.savedVideoItems);
   } catch (error) {
     alert(error.message);
     return;
@@ -846,45 +844,49 @@ var Video = /*#__PURE__*/function () {
       return (_JSON$parse = JSON.parse(localStorage.getItem('saved-video'))) !== null && _JSON$parse !== void 0 ? _JSON$parse : [];
     }
   }, {
-    key: "updateNewVideoItems",
-    value: function updateNewVideoItems() {
-      var updatedNewVideoItems = [];
+    key: "IsIncludedSavedItem",
+    value: function IsIncludedSavedItem(newItem) {
+      var isfindSavedItem = false;
 
-      var _iterator2 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems)),
+      var _iterator2 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
           _step2;
 
       try {
         for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var newItem = _step2.value;
-          var isfindSavedItem = false;
+          var savedItem = _step2.value;
 
-          var _iterator3 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
-              _step3;
-
-          try {
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var savedItem = _step3.value;
-
-              if (newItem.videoId === savedItem.videoId) {
-                isfindSavedItem = true;
-                updatedNewVideoItems.push(savedItem);
-                break;
-              }
-            }
-          } catch (err) {
-            _iterator3.e(err);
-          } finally {
-            _iterator3.f();
-          }
-
-          if (isfindSavedItem === false) {
-            updatedNewVideoItems.push(newItem);
+          if (newItem.videoId === savedItem.videoId) {
+            isfindSavedItem = true;
+            return savedItem;
           }
         }
       } catch (err) {
         _iterator2.e(err);
       } finally {
         _iterator2.f();
+      }
+
+      if (isfindSavedItem === false) {
+        return newItem;
+      }
+    }
+  }, {
+    key: "updateNewVideoItems",
+    value: function updateNewVideoItems() {
+      var updatedNewVideoItems = [];
+
+      var _iterator3 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems)),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var newItem = _step3.value;
+          updatedNewVideoItems.push(this.IsIncludedSavedItem(newItem));
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
       }
 
       if (updatedNewVideoItems.length) {
@@ -921,7 +923,7 @@ var Video = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                REDIRECT_SERVER_HOST = 'https://thirsty-ritchie-0c8419.netlify.app/';
+                REDIRECT_SERVER_HOST = 'https://upbeat-payne-6f096c.netlify.app/';
                 url = new URL('youtube/v3/search', REDIRECT_SERVER_HOST);
                 parameters = new URLSearchParams({
                   part: 'snippet',
