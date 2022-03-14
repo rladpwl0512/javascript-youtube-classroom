@@ -139,41 +139,41 @@ function _searchVideo3() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            this.searchResultView.hideNotFound();
             this.searchResultView.removeVideo();
             keyword = event.detail.keyword;
-            _context.prev = 2;
+            _context.prev = 3;
             this.video.keyword = keyword;
-            _context.next = 10;
+            _context.next = 11;
             break;
 
-          case 6:
-            _context.prev = 6;
-            _context.t0 = _context["catch"](2);
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](3);
             alert(_context.t0.message);
             return _context.abrupt("return");
 
-          case 10:
+          case 11:
             this.searchResultView.showSkeleton();
-            _context.next = 13;
+            _context.next = 14;
             return this.video.fetchYoutubeApi(keyword);
 
-          case 13:
-            _context.prev = 13;
+          case 14:
+            _context.prev = 14;
             this.video.setVideoInfo();
-            _context.next = 22;
+            _context.next = 23;
             break;
 
-          case 17:
-            _context.prev = 17;
-            _context.t1 = _context["catch"](13);
+          case 18:
+            _context.prev = 18;
+            _context.t1 = _context["catch"](14);
             this.searchResultView.removeVideo();
             this.searchResultView.showNotFound();
             return _context.abrupt("return");
 
-          case 22:
-            this.video.accumulateVideoItems();
+          case 23:
             this.video.updateNewVideoItems();
-            this.searchResultView.hideNotFound();
+            this.video.accumulateVideoItems();
             this.searchResultView.renderVideo(this.video.newVideoItems);
             this.searchResultView.startObserve();
 
@@ -182,7 +182,7 @@ function _searchVideo3() {
             return _context.stop();
         }
       }
-    }, _callee, this, [[2, 6], [13, 17]]);
+    }, _callee, this, [[3, 7], [14, 18]]);
   }));
   return _searchVideo3.apply(this, arguments);
 }
@@ -225,8 +225,8 @@ function _scrollNextVideos3() {
             return _context2.abrupt("return");
 
           case 18:
-            this.video.accumulateVideoItems();
             this.video.updateNewVideoItems();
+            this.video.accumulateVideoItems();
             this.searchResultView.renderVideo(this.video.newVideoItems);
             this.searchResultView.startObserve();
 
@@ -888,6 +888,8 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "setVideoInfo",
     value: function setVideoInfo() {
+      console.log((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos));
+
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _newVideoItems, (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos).items.map(function (item) {
         return {
           videoId: item.id.videoId,
@@ -904,6 +906,8 @@ var VideoModel = /*#__PURE__*/function () {
       (0,_utils_validator__WEBPACK_IMPORTED_MODULE_7__.checkLengthExist)((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems));
 
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _nextPageToken, (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos).nextPageToken);
+
+      console.log((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems));
     }
   }, {
     key: "fetchYoutubeApi",
@@ -1440,7 +1444,7 @@ ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_app_css__WEBPACK_
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_modal_css__WEBPACK_IMPORTED_MODULE_4__["default"]);
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_skeleton_css__WEBPACK_IMPORTED_MODULE_5__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nol,ul {\n    list-style: none;\n}\n\nhtml, body {\n    height: 100%;\n    -webkit-font-smoothing: antialiased;\n}\n\ninput, button, textarea, select {\n    font: inherit;\n}\n", "",{"version":3,"sources":["webpack://./src/css/index.css"],"names":[],"mappings":"AAKA;IACI,SAAS;IACT,UAAU;IACV,sBAAsB;AAC1B;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,mCAAmC;AACvC;;AAEA;IACI,aAAa;AACjB","sourcesContent":["@import './root.css';\n@import './app.css';\n@import './modal.css';\n@import './skeleton.css';\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nol,ul {\n    list-style: none;\n}\n\nhtml, body {\n    height: 100%;\n    -webkit-font-smoothing: antialiased;\n}\n\ninput, button, textarea, select {\n    font: inherit;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nol,ul {\n    list-style: none;\n}\n\nhtml, body {\n    height: 100%;\n    -webkit-font-smoothing: antialiased;\n}\n\ninput, button, textarea, select {\n    font: inherit;\n}\n", "",{"version":3,"sources":["webpack://./src/css/index.css"],"names":[],"mappings":"AAKA;IACI,SAAS;IACT,UAAU;IACV,sBAAsB;AAC1B;;AAEA;IACI,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,mCAAmC;AACvC;;AAEA;IACI,aAAa;AACjB","sourcesContent":["@import './root.css'; \n@import './app.css';\n@import './modal.css';\n@import './skeleton.css';\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nol,ul {\n    list-style: none;\n}\n\nhtml, body {\n    height: 100%;\n    -webkit-font-smoothing: antialiased;\n}\n\ninput, button, textarea, select {\n    font: inherit;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
