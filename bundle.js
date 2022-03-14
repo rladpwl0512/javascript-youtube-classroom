@@ -72,7 +72,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/SearchInputView.js */ "./src/js/views/SearchInputView.js");
 /* harmony import */ var _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/SearchResultView.js */ "./src/js/views/SearchResultView.js");
 /* harmony import */ var _dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dummy/dummyObject.js */ "./src/js/dummy/dummyObject.js");
-/* harmony import */ var _models_Video_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./models/Video.js */ "./src/js/models/Video.js");
+/* harmony import */ var _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./models/VideoModel.js */ "./src/js/models/VideoModel.js");
 /* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/event.js */ "./src/js/utils/event.js");
 /* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/validator.js */ "./src/js/utils/validator.js");
 
@@ -113,7 +113,7 @@ var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMP
 
   _classPrivateMethodInitSpec(this, _subscribeViewEvents);
 
-  this.video = new _models_Video_js__WEBPACK_IMPORTED_MODULE_8__["default"](_dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__["default"]);
+  this.video = new _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_8__["default"](_dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__["default"]);
   this.video.savedVideoItems = this.video.getItemsLocalStorage();
   this.appView = new _views_AppView_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
   this.searchInputView = new _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_5__["default"]();
@@ -680,16 +680,16 @@ var dummyObject = {
 
 /***/ }),
 
-/***/ "./src/js/models/Video.js":
-/*!********************************!*\
-  !*** ./src/js/models/Video.js ***!
-  \********************************/
+/***/ "./src/js/models/VideoModel.js":
+/*!*************************************!*\
+  !*** ./src/js/models/VideoModel.js ***!
+  \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Video)
+/* harmony export */   "default": () => (/* binding */ VideoModel)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
@@ -732,11 +732,11 @@ var _nextPageToken = /*#__PURE__*/new WeakMap();
 
 var _savedVideoItems = /*#__PURE__*/new WeakMap();
 
-var Video = /*#__PURE__*/function () {
-  function Video() {
+var VideoModel = /*#__PURE__*/function () {
+  function VideoModel() {
     var dummyObject = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Video);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, VideoModel);
 
     _classPrivateFieldInitSpec(this, _keyword, {
       writable: true,
@@ -776,7 +776,7 @@ var Video = /*#__PURE__*/function () {
     (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _savedVideoItems, []);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(Video, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(VideoModel, [{
     key: "keyword",
     get: function get() {
       return (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _keyword);
@@ -873,21 +873,13 @@ var Video = /*#__PURE__*/function () {
   }, {
     key: "updateNewVideoItems",
     value: function updateNewVideoItems() {
+      var _this = this;
+
       var updatedNewVideoItems = [];
 
-      var _iterator3 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems)),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var newItem = _step3.value;
-          updatedNewVideoItems.push(this.IsIncludedSavedItem(newItem));
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
-      }
+      (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems).forEach(function (newItem) {
+        updatedNewVideoItems.push(_this.IsIncludedSavedItem(newItem));
+      });
 
       if (updatedNewVideoItems.length) {
         (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _newVideoItems, updatedNewVideoItems);
@@ -982,7 +974,7 @@ var Video = /*#__PURE__*/function () {
     }()
   }]);
 
-  return Video;
+  return VideoModel;
 }();
 
 
