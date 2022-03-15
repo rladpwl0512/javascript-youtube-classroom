@@ -33,6 +33,25 @@ var EXCEPTION = Object.freeze({
 
 /***/ }),
 
+/***/ "./src/constants/keycode.js":
+/*!**********************************!*\
+  !*** ./src/constants/keycode.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var KEYCODE = Object.freeze({
+  ENTER: 13,
+  ESC: 27
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (KEYCODE);
+
+/***/ }),
+
 /***/ "./src/constants/video.js":
 /*!********************************!*\
   !*** ./src/constants/video.js ***!
@@ -102,8 +121,12 @@ var _scrollNextVideos = /*#__PURE__*/new WeakSet();
 
 var _saveVideo = /*#__PURE__*/new WeakSet();
 
+var _closeModal = /*#__PURE__*/new WeakSet();
+
 var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(function Controller() {
   (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Controller);
+
+  _classPrivateMethodInitSpec(this, _closeModal);
 
   _classPrivateMethodInitSpec(this, _saveVideo);
 
@@ -124,6 +147,7 @@ var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMP
 
 function _subscribeViewEvents2() {
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchInputView.$searchButton, '@search', _classPrivateMethodGet(this, _searchVideo, _searchVideo2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchInputView.$closeButton, '@close-modal', _classPrivateMethodGet(this, _closeModal, _closeModal2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchResultView.$searchTarget, '@scroll-bottom', _classPrivateMethodGet(this, _scrollNextVideos, _scrollNextVideos2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchResultView.$searchTarget, '@save-video', _classPrivateMethodGet(this, _saveVideo, _saveVideo2).bind(this));
 }
@@ -251,6 +275,15 @@ function _saveVideo2(event) {
   this.searchResultView.changeSaveButtonStyle(event.detail.buttonElement);
   var savedId = event.detail.savedId;
   this.video.setItemsLocalStorage(savedId);
+}
+
+function _closeModal2() {
+  // 모달 가리기
+  this.searchInputView.hideModal(); // 검색어 초기화
+
+  this.searchInputView.resetSearchInputKeyword(); // 스켈레톤 초기화
+
+  this.searchResultView.removeVideo();
 }
 
 
@@ -1149,10 +1182,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ SearchInputView)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
-/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../constants/keycode.js */ "./src/constants/keycode.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
 
 
 
@@ -1165,43 +1199,78 @@ function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(
 
 
 
+
 var _bindEvents = /*#__PURE__*/new WeakSet();
 
-var _handleKeypress = /*#__PURE__*/new WeakSet();
+var _handleKeydown = /*#__PURE__*/new WeakSet();
 
 var _handleClick = /*#__PURE__*/new WeakSet();
 
-var SearchInputView = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(function SearchInputView() {
-  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SearchInputView);
+var _handleClickCloseButton = /*#__PURE__*/new WeakSet();
 
-  _classPrivateMethodInitSpec(this, _handleClick);
+var SearchInputView = /*#__PURE__*/function () {
+  function SearchInputView() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, SearchInputView);
 
-  _classPrivateMethodInitSpec(this, _handleKeypress);
+    _classPrivateMethodInitSpec(this, _handleClickCloseButton);
 
-  _classPrivateMethodInitSpec(this, _bindEvents);
+    _classPrivateMethodInitSpec(this, _handleClick);
 
-  this.$searchInputKeyword = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-input-keyword');
-  this.$searchButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-button');
+    _classPrivateMethodInitSpec(this, _handleKeydown);
 
-  _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
-});
+    _classPrivateMethodInitSpec(this, _bindEvents);
+
+    this.$searchInputKeyword = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-input-keyword');
+    this.$searchButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-button');
+    this.$closeButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.close-button');
+    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.modal-container');
+    this.$dimmer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.dimmer');
+
+    _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(SearchInputView, [{
+    key: "hideModal",
+    value: function hideModal() {
+      this.$modalContainer.classList.add('hide');
+    }
+  }, {
+    key: "resetSearchInputKeyword",
+    value: function resetSearchInputKeyword() {
+      this.$searchInputKeyword.value = '';
+    }
+  }]);
+
+  return SearchInputView;
+}();
 
 function _bindEvents2() {
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.on)(this.$searchButton, 'click', _classPrivateMethodGet(this, _handleClick, _handleClick2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.on)(this.$searchInputKeyword, 'keypress', _classPrivateMethodGet(this, _handleKeypress, _handleKeypress2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$searchButton, 'click', _classPrivateMethodGet(this, _handleClick, _handleClick2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$searchInputKeyword, 'keydown', _classPrivateMethodGet(this, _handleKeydown, _handleKeydown2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$closeButton, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$dimmer, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(document, 'keydown', _classPrivateMethodGet(this, _handleKeydown, _handleKeydown2).bind(this));
 }
 
-function _handleKeypress2() {
-  if (window.event.keyCode === 13) {
+function _handleKeydown2() {
+  if (window.event.keyCode === _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__["default"].ENTER) {
     _classPrivateMethodGet(this, _handleClick, _handleClick2).call(this);
+  }
+
+  if (window.event.keyCode === _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__["default"].ESC) {
+    _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).call(this);
   }
 }
 
 function _handleClick2() {
   var keyword = this.$searchInputKeyword.value;
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.emit)(this.$searchButton, '@search', {
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$searchButton, '@search', {
     keyword: keyword
   });
+}
+
+function _handleClickCloseButton2() {
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$closeButton, '@close-modal');
 }
 
 
@@ -1471,7 +1540,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".modal-container {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 100vw;\n    height: 100vh;\n    position: fixed;\n    top: 0;\n    left: 0;\n}\n\n.hide {\n    display: none !important;\n}\n\n.dimmer {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    background: var(--dimmer);\n}\n\n.search-modal {\n    position: relative;\n    width: 1080px;\n    height: 727px;\n    background-color: var(--white);\n    border: 1px solid var(--search-modal-border);\n    border-radius: 4px;\n    padding: 50px 30px 32px 30px;\n}\n\n.search-modal__title {\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    text-align: center;\n    margin-bottom: 40px;\n}\n\n.search-input {\n    display: flex;\n    justify-content: center;\n    margin-bottom: 40px;\n}\n\n.search-input__keyword {\n    width: 400px;\n    height: 36px;\n    margin-right: 20px;\n    padding: 4px 8px;\n    border: 1px solid var(--gray);\n    border-radius: 4px;\n}\n\n.search-input__keyword::placeholder {\n    color: var(--search-input-placeholder);\n    font-size: 16px;\n}\n\n.search-input__search-button {\n    width: 72px;\n    height: 36px;\n    background: var(--button-color);\n    color: #FFFFFF;\n}\n\n.search-result.search-result--no-result {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    height: 493px;\n}\n\n.no-result {\n    align-items: center;\n    text-align: center;\n}\n\n.no-result__image {\n    width: 190px;\n    height: 140px;\n    margin-bottom: 32px;\n}\n\n.no-result__description {\n    font-size: 16px;\n    line-height: 150%;\n    text-align: center;\n    letter-spacing: 0.5px;\n}\n\n.video-list {\n    width: 1040px;\n    height: 493px;\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n    gap: 32px 20px;\n    overflow: hidden;\n}\n\n.scroll {\n    overflow-y: scroll;\n}\n\n.video-item {\n    position: relative;\n    width: 240px;\n    height: 255px;\n}\n\n.video-item__thumbnail {\n    width: 100%;\n    height: 135px;\n}\n\n.video-item__title {\n    font-weight: bold;\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    margin: 4px 0;\n}\n\n.video-item__channel-name {\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.video-item__published-date {\n    font-size: 12px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n}\n\n.video-item__save-button {\n    position: absolute;\n    right: 0;\n    width: 80px;\n    height: 36px;\n    background-color: var(--gray-lighten);\n    margin-top: 4px;\n}\n\n.video-item__save-button:hover {\n    background-color: var(--gray);\n}\n\n.saved-button {\n    color: var(--white);\n    cursor: default;\n    background-color: var(--button-color);\n}\n\n.saved-button:hover {\n    color: var(--white);\n    background-color: var(--button-color);\n}\n\n", "",{"version":3,"sources":["webpack://./src/css/modal.css"],"names":[],"mappings":"AAAA;IACI,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;IACZ,aAAa;IACb,eAAe;IACf,MAAM;IACN,OAAO;AACX;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,aAAa;IACb,aAAa;IACb,8BAA8B;IAC9B,4CAA4C;IAC5C,kBAAkB;IAClB,4BAA4B;AAChC;;AAEA;IACI,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,kBAAkB;IAClB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,uBAAuB;IACvB,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,gBAAgB;IAChB,6BAA6B;IAC7B,kBAAkB;AACtB;;AAEA;IACI,sCAAsC;IACtC,eAAe;AACnB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,+BAA+B;IAC/B,cAAc;AAClB;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,mBAAmB;IACnB,uBAAuB;IACvB,aAAa;AACjB;;AAEA;IACI,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,kBAAkB;IAClB,qBAAqB;AACzB;;AAEA;IACI,aAAa;IACb,aAAa;IACb,aAAa;IACb,mBAAmB;IACnB,eAAe;IACf,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;AACjB;;AAEA;IACI,WAAW;IACX,aAAa;AACjB;;AAEA;IACI,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,qBAAqB;IACrB,mBAAmB;IACnB,gBAAgB;IAChB,uBAAuB;IACvB,aAAa;AACjB;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,qBAAqB;IACrB,mBAAmB;IACnB,gBAAgB;IAChB,uBAAuB;AAC3B;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,qBAAqB;AACzB;;AAEA;IACI,kBAAkB;IAClB,QAAQ;IACR,WAAW;IACX,YAAY;IACZ,qCAAqC;IACrC,eAAe;AACnB;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,mBAAmB;IACnB,eAAe;IACf,qCAAqC;AACzC;;AAEA;IACI,mBAAmB;IACnB,qCAAqC;AACzC","sourcesContent":[".modal-container {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 100vw;\n    height: 100vh;\n    position: fixed;\n    top: 0;\n    left: 0;\n}\n\n.hide {\n    display: none !important;\n}\n\n.dimmer {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    background: var(--dimmer);\n}\n\n.search-modal {\n    position: relative;\n    width: 1080px;\n    height: 727px;\n    background-color: var(--white);\n    border: 1px solid var(--search-modal-border);\n    border-radius: 4px;\n    padding: 50px 30px 32px 30px;\n}\n\n.search-modal__title {\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    text-align: center;\n    margin-bottom: 40px;\n}\n\n.search-input {\n    display: flex;\n    justify-content: center;\n    margin-bottom: 40px;\n}\n\n.search-input__keyword {\n    width: 400px;\n    height: 36px;\n    margin-right: 20px;\n    padding: 4px 8px;\n    border: 1px solid var(--gray);\n    border-radius: 4px;\n}\n\n.search-input__keyword::placeholder {\n    color: var(--search-input-placeholder);\n    font-size: 16px;\n}\n\n.search-input__search-button {\n    width: 72px;\n    height: 36px;\n    background: var(--button-color);\n    color: #FFFFFF;\n}\n\n.search-result.search-result--no-result {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    height: 493px;\n}\n\n.no-result {\n    align-items: center;\n    text-align: center;\n}\n\n.no-result__image {\n    width: 190px;\n    height: 140px;\n    margin-bottom: 32px;\n}\n\n.no-result__description {\n    font-size: 16px;\n    line-height: 150%;\n    text-align: center;\n    letter-spacing: 0.5px;\n}\n\n.video-list {\n    width: 1040px;\n    height: 493px;\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n    gap: 32px 20px;\n    overflow: hidden;\n}\n\n.scroll {\n    overflow-y: scroll;\n}\n\n.video-item {\n    position: relative;\n    width: 240px;\n    height: 255px;\n}\n\n.video-item__thumbnail {\n    width: 100%;\n    height: 135px;\n}\n\n.video-item__title {\n    font-weight: bold;\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    margin: 4px 0;\n}\n\n.video-item__channel-name {\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.video-item__published-date {\n    font-size: 12px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n}\n\n.video-item__save-button {\n    position: absolute;\n    right: 0;\n    width: 80px;\n    height: 36px;\n    background-color: var(--gray-lighten);\n    margin-top: 4px;\n}\n\n.video-item__save-button:hover {\n    background-color: var(--gray);\n}\n\n.saved-button {\n    color: var(--white);\n    cursor: default;\n    background-color: var(--button-color);\n}\n\n.saved-button:hover {\n    color: var(--white);\n    background-color: var(--button-color);\n}\n\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".modal-container {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 100vw;\n    height: 100vh;\n    position: fixed;\n    top: 0;\n    left: 0;\n}\n\n.close-button {\n    position: absolute;\n    top: 20px;\n    right: 30px;\n    appearance: none;\n    background-color: transparent;\n    border: 0;\n    padding: 0;\n    font-size: 30px;\n    font-weight: bold;\n}\n\n.hide {\n    display: none !important;\n}\n\n.dimmer {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    background: var(--dimmer);\n}\n\n.search-modal {\n    position: relative;\n    width: 1080px;\n    height: 727px;\n    background-color: var(--white);\n    border: 1px solid var(--search-modal-border);\n    border-radius: 4px;\n    padding: 50px 30px 32px 30px;\n}\n\n.search-modal__title {\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    text-align: center;\n    margin-bottom: 40px;\n}\n\n.search-input {\n    display: flex;\n    justify-content: center;\n    margin-bottom: 40px;\n}\n\n.search-input__keyword {\n    width: 400px;\n    height: 36px;\n    margin-right: 20px;\n    padding: 4px 8px;\n    border: 1px solid var(--gray);\n    border-radius: 4px;\n}\n\n.search-input__keyword::placeholder {\n    color: var(--search-input-placeholder);\n    font-size: 16px;\n}\n\n.search-input__search-button {\n    width: 72px;\n    height: 36px;\n    background: var(--button-color);\n    color: #FFFFFF;\n}\n\n.search-result.search-result--no-result {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    height: 493px;\n}\n\n.no-result {\n    align-items: center;\n    text-align: center;\n}\n\n.no-result__image {\n    width: 190px;\n    height: 140px;\n    margin-bottom: 32px;\n}\n\n.no-result__description {\n    font-size: 16px;\n    line-height: 150%;\n    text-align: center;\n    letter-spacing: 0.5px;\n}\n\n.video-list {\n    width: 1040px;\n    height: 493px;\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n    gap: 32px 20px;\n    overflow: hidden;\n}\n\n.scroll {\n    overflow-y: scroll;\n}\n\n.video-item {\n    position: relative;\n    width: 240px;\n    height: 255px;\n}\n\n.video-item__thumbnail {\n    width: 100%;\n    height: 135px;\n}\n\n.video-item__title {\n    font-weight: bold;\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    margin: 4px 0;\n}\n\n.video-item__channel-name {\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.video-item__published-date {\n    font-size: 12px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n}\n\n.video-item__save-button {\n    position: absolute;\n    right: 0;\n    width: 80px;\n    height: 36px;\n    background-color: var(--gray-lighten);\n    margin-top: 4px;\n}\n\n.video-item__save-button:hover {\n    background-color: var(--gray);\n}\n\n.saved-button {\n    color: var(--white);\n    cursor: default;\n    background-color: var(--button-color);\n}\n\n.saved-button:hover {\n    color: var(--white);\n    background-color: var(--button-color);\n}\n\n", "",{"version":3,"sources":["webpack://./src/css/modal.css"],"names":[],"mappings":"AAAA;IACI,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;IACZ,aAAa;IACb,eAAe;IACf,MAAM;IACN,OAAO;AACX;;AAEA;IACI,kBAAkB;IAClB,SAAS;IACT,WAAW;IACX,gBAAgB;IAChB,6BAA6B;IAC7B,SAAS;IACT,UAAU;IACV,eAAe;IACf,iBAAiB;AACrB;;AAEA;IACI,wBAAwB;AAC5B;;AAEA;IACI,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,yBAAyB;AAC7B;;AAEA;IACI,kBAAkB;IAClB,aAAa;IACb,aAAa;IACb,8BAA8B;IAC9B,4CAA4C;IAC5C,kBAAkB;IAClB,4BAA4B;AAChC;;AAEA;IACI,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,kBAAkB;IAClB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,uBAAuB;IACvB,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,YAAY;IACZ,kBAAkB;IAClB,gBAAgB;IAChB,6BAA6B;IAC7B,kBAAkB;AACtB;;AAEA;IACI,sCAAsC;IACtC,eAAe;AACnB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,+BAA+B;IAC/B,cAAc;AAClB;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,mBAAmB;IACnB,uBAAuB;IACvB,aAAa;AACjB;;AAEA;IACI,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,kBAAkB;IAClB,qBAAqB;AACzB;;AAEA;IACI,aAAa;IACb,aAAa;IACb,aAAa;IACb,mBAAmB;IACnB,eAAe;IACf,cAAc;IACd,gBAAgB;AACpB;;AAEA;IACI,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;AACjB;;AAEA;IACI,WAAW;IACX,aAAa;AACjB;;AAEA;IACI,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,qBAAqB;IACrB,mBAAmB;IACnB,gBAAgB;IAChB,uBAAuB;IACvB,aAAa;AACjB;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,qBAAqB;IACrB,mBAAmB;IACnB,gBAAgB;IAChB,uBAAuB;AAC3B;;AAEA;IACI,eAAe;IACf,iBAAiB;IACjB,qBAAqB;AACzB;;AAEA;IACI,kBAAkB;IAClB,QAAQ;IACR,WAAW;IACX,YAAY;IACZ,qCAAqC;IACrC,eAAe;AACnB;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI,mBAAmB;IACnB,eAAe;IACf,qCAAqC;AACzC;;AAEA;IACI,mBAAmB;IACnB,qCAAqC;AACzC","sourcesContent":[".modal-container {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 100vw;\n    height: 100vh;\n    position: fixed;\n    top: 0;\n    left: 0;\n}\n\n.close-button {\n    position: absolute;\n    top: 20px;\n    right: 30px;\n    appearance: none;\n    background-color: transparent;\n    border: 0;\n    padding: 0;\n    font-size: 30px;\n    font-weight: bold;\n}\n\n.hide {\n    display: none !important;\n}\n\n.dimmer {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    background: var(--dimmer);\n}\n\n.search-modal {\n    position: relative;\n    width: 1080px;\n    height: 727px;\n    background-color: var(--white);\n    border: 1px solid var(--search-modal-border);\n    border-radius: 4px;\n    padding: 50px 30px 32px 30px;\n}\n\n.search-modal__title {\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    text-align: center;\n    margin-bottom: 40px;\n}\n\n.search-input {\n    display: flex;\n    justify-content: center;\n    margin-bottom: 40px;\n}\n\n.search-input__keyword {\n    width: 400px;\n    height: 36px;\n    margin-right: 20px;\n    padding: 4px 8px;\n    border: 1px solid var(--gray);\n    border-radius: 4px;\n}\n\n.search-input__keyword::placeholder {\n    color: var(--search-input-placeholder);\n    font-size: 16px;\n}\n\n.search-input__search-button {\n    width: 72px;\n    height: 36px;\n    background: var(--button-color);\n    color: #FFFFFF;\n}\n\n.search-result.search-result--no-result {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    height: 493px;\n}\n\n.no-result {\n    align-items: center;\n    text-align: center;\n}\n\n.no-result__image {\n    width: 190px;\n    height: 140px;\n    margin-bottom: 32px;\n}\n\n.no-result__description {\n    font-size: 16px;\n    line-height: 150%;\n    text-align: center;\n    letter-spacing: 0.5px;\n}\n\n.video-list {\n    width: 1040px;\n    height: 493px;\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n    gap: 32px 20px;\n    overflow: hidden;\n}\n\n.scroll {\n    overflow-y: scroll;\n}\n\n.video-item {\n    position: relative;\n    width: 240px;\n    height: 255px;\n}\n\n.video-item__thumbnail {\n    width: 100%;\n    height: 135px;\n}\n\n.video-item__title {\n    font-weight: bold;\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    margin: 4px 0;\n}\n\n.video-item__channel-name {\n    font-size: 16px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n\n.video-item__published-date {\n    font-size: 12px;\n    line-height: 24px;\n    letter-spacing: 0.5px;\n}\n\n.video-item__save-button {\n    position: absolute;\n    right: 0;\n    width: 80px;\n    height: 36px;\n    background-color: var(--gray-lighten);\n    margin-top: 4px;\n}\n\n.video-item__save-button:hover {\n    background-color: var(--gray);\n}\n\n.saved-button {\n    color: var(--white);\n    cursor: default;\n    background-color: var(--button-color);\n}\n\n.saved-button:hover {\n    color: var(--white);\n    background-color: var(--button-color);\n}\n\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
