@@ -87,13 +87,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _views_AppView_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/AppView.js */ "./src/js/views/AppView.js");
-/* harmony import */ var _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/SearchInputView.js */ "./src/js/views/SearchInputView.js");
-/* harmony import */ var _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/SearchResultView.js */ "./src/js/views/SearchResultView.js");
-/* harmony import */ var _dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dummy/dummyObject.js */ "./src/js/dummy/dummyObject.js");
-/* harmony import */ var _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./models/VideoModel.js */ "./src/js/models/VideoModel.js");
-/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/event.js */ "./src/js/utils/event.js");
-/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _views_AppView_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/AppView.js */ "./src/js/views/AppView.js");
+/* harmony import */ var _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/SearchInputView.js */ "./src/js/views/SearchInputView.js");
+/* harmony import */ var _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/SearchResultView.js */ "./src/js/views/SearchResultView.js");
+/* harmony import */ var _views_SearchCloseView_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./views/SearchCloseView.js */ "./src/js/views/SearchCloseView.js");
+/* harmony import */ var _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./models/VideoModel.js */ "./src/js/models/VideoModel.js");
+/* harmony import */ var _dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./dummy/dummyObject.js */ "./src/js/dummy/dummyObject.js");
 
 
 
@@ -104,6 +105,7 @@ function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclarati
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
 function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
+
 
 
 
@@ -136,20 +138,21 @@ var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMP
 
   _classPrivateMethodInitSpec(this, _subscribeViewEvents);
 
-  this.video = new _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_8__["default"](_dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_7__["default"]);
+  this.video = new _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_10__["default"](_dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_11__["default"]);
   this.video.savedVideoItems = this.video.getItemsLocalStorage();
-  this.appView = new _views_AppView_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
-  this.searchInputView = new _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_5__["default"]();
-  this.searchResultView = new _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  this.appView = new _views_AppView_js__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  this.searchInputView = new _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_7__["default"]();
+  this.searchResultView = new _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_8__["default"]();
+  this.SearchCloseView = new _views_SearchCloseView_js__WEBPACK_IMPORTED_MODULE_9__["default"]();
 
   _classPrivateMethodGet(this, _subscribeViewEvents, _subscribeViewEvents2).call(this);
 });
 
 function _subscribeViewEvents2() {
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchInputView.$searchButton, '@search', _classPrivateMethodGet(this, _searchVideo, _searchVideo2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchInputView.$closeButton, '@close-modal', _classPrivateMethodGet(this, _closeModal, _closeModal2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchResultView.$searchTarget, '@scroll-bottom', _classPrivateMethodGet(this, _scrollNextVideos, _scrollNextVideos2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_9__.on)(this.searchResultView.$searchTarget, '@save-video', _classPrivateMethodGet(this, _saveVideo, _saveVideo2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchInputView.$searchButton, '@search', _classPrivateMethodGet(this, _searchVideo, _searchVideo2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@scroll-bottom', _classPrivateMethodGet(this, _scrollNextVideos, _scrollNextVideos2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@save-video', _classPrivateMethodGet(this, _saveVideo, _saveVideo2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.SearchCloseView.$closeButton, '@close-modal', _classPrivateMethodGet(this, _closeModal, _closeModal2).bind(this));
 }
 
 function _searchVideo2(_x) {
@@ -223,7 +226,7 @@ function _scrollNextVideos3() {
           case 0:
             this.searchResultView.stopObserve();
             _context2.prev = 1;
-            (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_10__.checkVideoIsNone)();
+            (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_5__.checkVideoIsNone)();
             _context2.next = 8;
             break;
 
@@ -266,7 +269,7 @@ function _scrollNextVideos3() {
 
 function _saveVideo2(event) {
   try {
-    (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_10__.checkExceedLimit)(this.video.savedVideoItems);
+    (0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_5__.checkExceedLimit)(this.video.savedVideoItems);
   } catch (error) {
     alert(error.message);
     return;
@@ -278,11 +281,8 @@ function _saveVideo2(event) {
 }
 
 function _closeModal2() {
-  // 모달 가리기
-  this.searchInputView.hideModal(); // 검색어 초기화
-
-  this.searchInputView.resetSearchInputKeyword(); // 스켈레톤 초기화
-
+  this.searchInputView.resetSearchInputKeyword();
+  this.searchResultView.hideModal();
   this.searchResultView.removeVideo();
 }
 
@@ -1171,6 +1171,77 @@ function _handleClickButton2() {
 
 /***/ }),
 
+/***/ "./src/js/views/SearchCloseView.js":
+/*!*****************************************!*\
+  !*** ./src/js/views/SearchCloseView.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SearchCloseView)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../constants/keycode.js */ "./src/constants/keycode.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+
+
+
+function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
+
+
+
+
+
+var _bindEvents = /*#__PURE__*/new WeakSet();
+
+var _handleKeydown = /*#__PURE__*/new WeakSet();
+
+var _handleClickCloseButton = /*#__PURE__*/new WeakSet();
+
+var SearchCloseView = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(function SearchCloseView() {
+  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SearchCloseView);
+
+  _classPrivateMethodInitSpec(this, _handleClickCloseButton);
+
+  _classPrivateMethodInitSpec(this, _handleKeydown);
+
+  _classPrivateMethodInitSpec(this, _bindEvents);
+
+  this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.modal-container');
+  this.$closeButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.close-button', this.$modalContainer);
+  this.$dimmer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.dimmer', this.$modalContainer);
+
+  _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
+});
+
+function _bindEvents2() {
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$closeButton, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$dimmer, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(document, 'keydown', _classPrivateMethodGet(this, _handleKeydown, _handleKeydown2).bind(this));
+}
+
+function _handleKeydown2() {
+  if (window.event.keyCode === _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__["default"].ESC) {
+    _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).call(this);
+  }
+}
+
+function _handleClickCloseButton2() {
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$closeButton, '@close-modal');
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/views/SearchInputView.js":
 /*!*****************************************!*\
   !*** ./src/js/views/SearchInputView.js ***!
@@ -1206,13 +1277,9 @@ var _handleKeydown = /*#__PURE__*/new WeakSet();
 
 var _handleClick = /*#__PURE__*/new WeakSet();
 
-var _handleClickCloseButton = /*#__PURE__*/new WeakSet();
-
 var SearchInputView = /*#__PURE__*/function () {
   function SearchInputView() {
     (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, SearchInputView);
-
-    _classPrivateMethodInitSpec(this, _handleClickCloseButton);
 
     _classPrivateMethodInitSpec(this, _handleClick);
 
@@ -1220,21 +1287,14 @@ var SearchInputView = /*#__PURE__*/function () {
 
     _classPrivateMethodInitSpec(this, _bindEvents);
 
-    this.$searchInputKeyword = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-input-keyword');
-    this.$searchButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-button');
-    this.$closeButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.close-button');
-    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.modal-container');
-    this.$dimmer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.dimmer');
+    this.$searchInput = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.search-input');
+    this.$searchInputKeyword = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-input-keyword', this.$searchInput);
+    this.$searchButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-button', this.$searchInput);
 
     _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(SearchInputView, [{
-    key: "hideModal",
-    value: function hideModal() {
-      this.$modalContainer.classList.add('hide');
-    }
-  }, {
     key: "resetSearchInputKeyword",
     value: function resetSearchInputKeyword() {
       this.$searchInputKeyword.value = '';
@@ -1247,18 +1307,11 @@ var SearchInputView = /*#__PURE__*/function () {
 function _bindEvents2() {
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$searchButton, 'click', _classPrivateMethodGet(this, _handleClick, _handleClick2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$searchInputKeyword, 'keydown', _classPrivateMethodGet(this, _handleKeydown, _handleKeydown2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$closeButton, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.$dimmer, 'click', _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(document, 'keydown', _classPrivateMethodGet(this, _handleKeydown, _handleKeydown2).bind(this));
 }
 
 function _handleKeydown2() {
   if (window.event.keyCode === _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__["default"].ENTER) {
     _classPrivateMethodGet(this, _handleClick, _handleClick2).call(this);
-  }
-
-  if (window.event.keyCode === _constants_keycode_js__WEBPACK_IMPORTED_MODULE_2__["default"].ESC) {
-    _classPrivateMethodGet(this, _handleClickCloseButton, _handleClickCloseButton2).call(this);
   }
 }
 
@@ -1267,10 +1320,6 @@ function _handleClick2() {
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$searchButton, '@search', {
     keyword: keyword
   });
-}
-
-function _handleClickCloseButton2() {
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$closeButton, '@close-modal');
 }
 
 
@@ -1290,9 +1339,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _Template_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Template.js */ "./src/js/views/Template.js");
-/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
-/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _Template_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Template.js */ "./src/js/views/Template.js");
 
 
 
@@ -1305,13 +1354,14 @@ var SearchResultView = /*#__PURE__*/function () {
 
     (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, SearchResultView);
 
-    this.$videoList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-list');
-    this.template = new _Template_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    this.$searchTarget = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-target');
-    this.$searchNoResult = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-no-result');
+    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.modal-container');
+    this.$videoList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-list', this.$modalContainer);
+    this.$searchTarget = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-target', this.$modalContainer);
+    this.$searchNoResult = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-no-result', this.$modalContainer);
+    this.template = new _Template_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
     this.observer = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
-        (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(_this.$searchTarget, '@scroll-bottom');
+        (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.emit)(_this.$searchTarget, '@scroll-bottom');
       }
     }, {
       root: this.$videoList,
@@ -1329,18 +1379,18 @@ var SearchResultView = /*#__PURE__*/function () {
         this.deleteSkeleton(haveToDeleteSkeletonCount);
       }
 
-      this.$videoItems = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$$)('.skeleton');
+      this.$videoItems = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$$)('.skeleton');
       this.$videoItems.forEach(function ($item, idx) {
         $item.classList.remove('skeleton');
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__thumbnail', $item).setAttribute('srcdoc', _this2.template.getThumbnail(newVideoItems[idx].thumbnailUrl, newVideoItems[idx].videoId));
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__title', $item).innerText = newVideoItems[idx].title;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__channel-name', $item).innerText = newVideoItems[idx].channelTitle;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__published-date', $item).innerText = newVideoItems[idx].publishTime;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).innerText = newVideoItems[idx].saved ? '저장됨' : '⬇ 저장';
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).classList.add(newVideoItems[idx].saved ? 'saved-button' : 'button');
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).disabled = newVideoItems[idx].saved;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).addEventListener('click', _this2.handleSaveButton.bind(_this2));
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).dataset.id = newVideoItems[idx].videoId;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__thumbnail', $item).setAttribute('srcdoc', _this2.template.getThumbnail(newVideoItems[idx].thumbnailUrl, newVideoItems[idx].videoId));
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__title', $item).innerText = newVideoItems[idx].title;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__channel-name', $item).innerText = newVideoItems[idx].channelTitle;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__published-date', $item).innerText = newVideoItems[idx].publishTime;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).innerText = newVideoItems[idx].saved ? '저장됨' : '⬇ 저장';
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).classList.add(newVideoItems[idx].saved ? 'saved-button' : 'button');
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).disabled = newVideoItems[idx].saved;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).addEventListener('click', _this2.handleSaveButton.bind(_this2));
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).dataset.id = newVideoItems[idx].videoId;
       });
     }
   }, {
@@ -1348,7 +1398,7 @@ var SearchResultView = /*#__PURE__*/function () {
     value: function handleSaveButton(event) {
       var savedId = event.target.dataset.id;
       var buttonElement = event.target;
-      (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$searchTarget, '@save-video', {
+      (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.emit)(this.$searchTarget, '@save-video', {
         savedId: savedId,
         buttonElement: buttonElement
       });
@@ -1399,6 +1449,11 @@ var SearchResultView = /*#__PURE__*/function () {
     value: function hideNotFound() {
       this.$searchTarget.classList.remove('hide');
       this.$searchNoResult.classList.add('hide');
+    }
+  }, {
+    key: "hideModal",
+    value: function hideModal() {
+      this.$modalContainer.classList.add('hide');
     }
   }]);
 
