@@ -27,7 +27,8 @@ var EXCEPTION = Object.freeze({
   EMPTY_ERROR_MESSAGE: '입력된 검색어가 없습니다. 검색어를 입력해주세요.',
   NOT_FOUND_ERROR_MESSAGE: '검색된 결과가 없습니다. 다른 검색어를 입력해주세요.',
   EXCEED_LIMIT_ERROR_MESSAGE: '저장된 영상의 개수가 100개를 초과하여 저장되지 않았습니다. 100개 이하의 영상만 저장해주세요.',
-  VIDEO_IS_NONE_ERROR_MESSAGE: '영상의 개수가 10개 미만입니다. 영상이 더이상 없습니다.'
+  VIDEO_IS_NONE_ERROR_MESSAGE: '영상의 개수가 10개 미만입니다. 영상이 더이상 없습니다.',
+  DELETE_CONFIRM_MESSAGE: '정말 지우시겠습니까? 지우고 싶으면 "확인"을 클릭하세요.'
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EXCEPTION);
 
@@ -125,8 +126,16 @@ var _saveVideo = /*#__PURE__*/new WeakSet();
 
 var _closeModal = /*#__PURE__*/new WeakSet();
 
+var _deleteVideo = /*#__PURE__*/new WeakSet();
+
+var _checkSawVideo = /*#__PURE__*/new WeakSet();
+
 var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(function Controller() {
   (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Controller);
+
+  _classPrivateMethodInitSpec(this, _checkSawVideo);
+
+  _classPrivateMethodInitSpec(this, _deleteVideo);
 
   _classPrivateMethodInitSpec(this, _closeModal);
 
@@ -139,16 +148,19 @@ var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMP
   _classPrivateMethodInitSpec(this, _subscribeViewEvents);
 
   this.video = new _models_VideoModel_js__WEBPACK_IMPORTED_MODULE_10__["default"](_dummy_dummyObject_js__WEBPACK_IMPORTED_MODULE_11__["default"]);
-  this.video.savedVideoItems = this.video.getItemsLocalStorage();
   this.appView = new _views_AppView_js__WEBPACK_IMPORTED_MODULE_6__["default"]();
   this.searchInputView = new _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_7__["default"]();
   this.searchResultView = new _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_8__["default"]();
   this.SearchCloseView = new _views_SearchCloseView_js__WEBPACK_IMPORTED_MODULE_9__["default"]();
+  this.video.savedVideoItems = this.video.getItemsLocalStorage();
+  this.appView.renderSavedVideo(this.video.getItemsLocalStorage());
 
   _classPrivateMethodGet(this, _subscribeViewEvents, _subscribeViewEvents2).call(this);
 });
 
 function _subscribeViewEvents2() {
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.appView.$willSeeWrapper, '@delete-video', _classPrivateMethodGet(this, _deleteVideo, _deleteVideo2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.appView.$willSeeWrapper, '@check-saw-video', _classPrivateMethodGet(this, _checkSawVideo, _checkSawVideo2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchInputView.$searchButton, '@search', _classPrivateMethodGet(this, _searchVideo, _searchVideo2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@scroll-bottom', _classPrivateMethodGet(this, _scrollNextVideos, _scrollNextVideos2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@save-video', _classPrivateMethodGet(this, _saveVideo, _saveVideo2).bind(this));
@@ -201,8 +213,8 @@ function _searchVideo3() {
           case 23:
             this.video.updateNewVideoItems();
             this.video.accumulateVideoItems();
-            this.searchResultView.renderVideo(this.video.newVideoItems);
             this.searchResultView.startObserve();
+            this.searchResultView.renderVideo(this.video.newVideoItems);
 
           case 27:
           case "end":
@@ -254,8 +266,8 @@ function _scrollNextVideos3() {
           case 18:
             this.video.updateNewVideoItems();
             this.video.accumulateVideoItems();
-            this.searchResultView.renderVideo(this.video.newVideoItems);
             this.searchResultView.startObserve();
+            this.searchResultView.renderVideo(this.video.newVideoItems);
 
           case 22:
           case "end":
@@ -281,9 +293,24 @@ function _saveVideo2(event) {
 }
 
 function _closeModal2() {
+  this.video.resetAllVideoItems();
   this.searchInputView.resetSearchInputKeyword();
   this.searchResultView.hideModal();
   this.searchResultView.removeVideo();
+  this.appView.renderSavedVideo(this.video.getItemsLocalStorage());
+}
+
+function _deleteVideo2(event) {
+  if ((0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_5__.checkAnswerYes)()) {
+    this.video.deleteVideo(event.detail.deleteVideoId);
+    this.appView.renderSavedVideo(this.video.getItemsLocalStorage());
+  }
+}
+
+function _checkSawVideo2(event) {
+  this.video.updateSawAttribute(event.detail.sawVideoId);
+  this.video.updateItemsLocalStorage();
+  this.appView.renderSavedVideo(this.video.getItemsLocalStorage());
 }
 
 
@@ -839,6 +866,11 @@ var VideoModel = /*#__PURE__*/function () {
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _savedVideoItems, items);
     }
   }, {
+    key: "resetAllVideoItems",
+    value: function resetAllVideoItems() {
+      (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _allVideoItems, []);
+    }
+  }, {
     key: "accumulateVideoItems",
     value: function accumulateVideoItems() {
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _allVideoItems, [].concat((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _allVideoItems)), (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems))));
@@ -877,6 +909,23 @@ var VideoModel = /*#__PURE__*/function () {
       return (_JSON$parse = JSON.parse(localStorage.getItem('saved-video'))) !== null && _JSON$parse !== void 0 ? _JSON$parse : [];
     }
   }, {
+    key: "updateItemsLocalStorage",
+    value: function updateItemsLocalStorage() {
+      localStorage.setItem('saved-video', JSON.stringify((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)));
+    }
+  }, {
+    key: "deleteVideo",
+    value: function deleteVideo(deleteVideoId) {
+      for (var idx = 0; idx < (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).length; idx += 1) {
+        if ((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)[idx].videoId === deleteVideoId) {
+          (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).splice(idx, 1);
+
+          this.updateItemsLocalStorage();
+          return;
+        }
+      }
+    }
+  }, {
     key: "IsIncludedSavedItem",
     value: function IsIncludedSavedItem(newItem) {
       var isfindSavedItem = false;
@@ -899,19 +948,15 @@ var VideoModel = /*#__PURE__*/function () {
         _iterator2.f();
       }
 
-      if (isfindSavedItem === false) {
-        return newItem;
-      }
+      return isfindSavedItem || newItem;
     }
   }, {
     key: "updateNewVideoItems",
     value: function updateNewVideoItems() {
       var _this = this;
 
-      var updatedNewVideoItems = [];
-
-      (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems).forEach(function (newItem) {
-        updatedNewVideoItems.push(_this.IsIncludedSavedItem(newItem));
+      var updatedNewVideoItems = (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems).map(function (newItem) {
+        return _this.IsIncludedSavedItem(newItem);
       });
 
       if (updatedNewVideoItems.length) {
@@ -921,8 +966,6 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "setVideoInfo",
     value: function setVideoInfo() {
-      console.log((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos));
-
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _newVideoItems, (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos).items.map(function (item) {
         return {
           videoId: item.id.videoId,
@@ -932,15 +975,35 @@ var VideoModel = /*#__PURE__*/function () {
           channelTitle: item.snippet.channelTitle,
           publishTime: item.snippet.publishTime,
           thumbnailUrl: item.snippet.thumbnails.high.url,
-          saved: false
+          saved: false,
+          saw: false
         };
       }));
 
       (0,_utils_validator__WEBPACK_IMPORTED_MODULE_7__.checkLengthExist)((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems));
 
       (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _nextPageToken, (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _fetchedVideos).nextPageToken);
+    }
+  }, {
+    key: "updateSawAttribute",
+    value: function updateSawAttribute(sawVideoId) {
+      var _iterator3 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
+          _step3;
 
-      console.log((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems));
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var video = _step3.value;
+
+          if (video.videoId === sawVideoId) {
+            video.saw = !video.saw;
+            return;
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
     }
   }, {
     key: "fetchYoutubeApi",
@@ -1036,7 +1099,7 @@ var $ = function $(selector) {
 };
 var $$ = function $$(selector) {
   var scope = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-  return Array.from(scope.querySelectorAll(selector));
+  return scope.querySelectorAll(selector);
 };
 
 /***/ }),
@@ -1074,6 +1137,7 @@ var on = function on(target, eventName, handler) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkAnswerYes": () => (/* binding */ checkAnswerYes),
 /* harmony export */   "checkEmpty": () => (/* binding */ checkEmpty),
 /* harmony export */   "checkExceedLimit": () => (/* binding */ checkExceedLimit),
 /* harmony export */   "checkLengthExist": () => (/* binding */ checkLengthExist),
@@ -1114,6 +1178,9 @@ var checkVideoIsNone = function checkVideoIsNone() {
     throw new Error(_constants_exception__WEBPACK_IMPORTED_MODULE_0__["default"].VIDEO_IS_NONE_ERROR_MESSAGE);
   }
 };
+var checkAnswerYes = function checkAnswerYes() {
+  return window.confirm(_constants_exception__WEBPACK_IMPORTED_MODULE_0__["default"].DELETE_CONFIRM_MESSAGE);
+};
 
 /***/ }),
 
@@ -1128,11 +1195,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ AppView)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _Template_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Template.js */ "./src/js/views/Template.js");
 
 
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
 
@@ -1142,29 +1217,123 @@ function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(
 
 
 
+
+
 var _bindEvents = /*#__PURE__*/new WeakSet();
 
-var _handleClickButton = /*#__PURE__*/new WeakSet();
+var _handleClickSearchButton = /*#__PURE__*/new WeakSet();
 
-var AppView = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(function AppView() {
-  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, AppView);
+var _handleClickWillSeeButton = /*#__PURE__*/new WeakSet();
 
-  _classPrivateMethodInitSpec(this, _handleClickButton);
+var _handleClickSawButton = /*#__PURE__*/new WeakSet();
 
-  _classPrivateMethodInitSpec(this, _bindEvents);
+var _handleClickUserButton = /*#__PURE__*/new WeakSet();
 
-  this.$searchModalButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-modal-button');
-  this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.modal-container');
+var AppView = /*#__PURE__*/function () {
+  function AppView() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, AppView);
 
-  _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
-});
+    _classPrivateMethodInitSpec(this, _handleClickUserButton);
+
+    _classPrivateMethodInitSpec(this, _handleClickSawButton);
+
+    _classPrivateMethodInitSpec(this, _handleClickWillSeeButton);
+
+    _classPrivateMethodInitSpec(this, _handleClickSearchButton);
+
+    _classPrivateMethodInitSpec(this, _bindEvents);
+
+    this.template = new _Template_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.$searchModalButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-modal-button');
+    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.modal-container');
+    this.$willSeeButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#will-see-button');
+    this.$sawButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#saw-button');
+    this.$willSeeWrapper = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.will-see-wrapper');
+    this.$isEmpty = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.is-empty', this.$willSeeWrapper);
+    this.$willSeeList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#will-see-list', this.$willSeeWrapper);
+    this.$sawWrapper = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.saw-wrapper');
+    this.$sawList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#saw-list', this.$sawWrapper);
+
+    _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(AppView, [{
+    key: "renderSavedVideo",
+    value: function renderSavedVideo(savedVideos) {
+      if (savedVideos.length === 0) {
+        this.$isEmpty.classList.remove('hide');
+      }
+
+      this.$willSeeList.replaceChildren();
+      this.$sawList.replaceChildren();
+
+      var _iterator = _createForOfIteratorHelper(savedVideos),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var video = _step.value;
+
+          if (video.saw) {
+            this.$sawList.insertAdjacentHTML('beforeend', this.template.getSavedVideo(video));
+            continue;
+          }
+
+          this.$willSeeList.insertAdjacentHTML('beforeend', this.template.getSavedVideo(video));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+  }]);
+
+  return AppView;
+}();
 
 function _bindEvents2() {
-  this.$searchModalButton.addEventListener('click', _classPrivateMethodGet(this, _handleClickButton, _handleClickButton2).bind(this));
+  this.$searchModalButton.addEventListener('click', _classPrivateMethodGet(this, _handleClickSearchButton, _handleClickSearchButton2).bind(this));
+  this.$willSeeButton.addEventListener('click', _classPrivateMethodGet(this, _handleClickWillSeeButton, _handleClickWillSeeButton2).bind(this));
+  this.$sawButton.addEventListener('click', _classPrivateMethodGet(this, _handleClickSawButton, _handleClickSawButton2).bind(this));
+  this.$willSeeWrapper.addEventListener('click', _classPrivateMethodGet(this, _handleClickUserButton, _handleClickUserButton2).bind(this));
+  this.$sawWrapper.addEventListener('click', _classPrivateMethodGet(this, _handleClickUserButton, _handleClickUserButton2).bind(this));
 }
 
-function _handleClickButton2() {
+function _handleClickSearchButton2() {
   this.$modalContainer.classList.remove('hide');
+}
+
+function _handleClickWillSeeButton2() {
+  this.$sawButton.classList.remove('clicked');
+  this.$willSeeButton.classList.add('clicked');
+  this.$sawWrapper.classList.add('hide');
+  this.$willSeeWrapper.classList.remove('hide');
+}
+
+function _handleClickSawButton2() {
+  this.$willSeeButton.classList.remove('clicked');
+  this.$sawButton.classList.add('clicked');
+  this.$willSeeWrapper.classList.add('hide');
+  this.$sawWrapper.classList.remove('hide');
+}
+
+function _handleClickUserButton2(_ref) {
+  var target = _ref.target;
+
+  if (target.className === 'user-delete-button') {
+    var deleteVideoId = target.closest('li').dataset.videoId;
+    (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_2__.emit)(this.$willSeeWrapper, '@delete-video', {
+      deleteVideoId: deleteVideoId
+    });
+  }
+
+  if (target.className === 'user-saw-button') {
+    var sawVideoId = target.closest('li').dataset.videoId;
+    (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_2__.emit)(this.$willSeeWrapper, '@check-saw-video', {
+      sawVideoId: sawVideoId
+    });
+  }
 }
 
 
@@ -1337,11 +1506,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ SearchResultView)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
-/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
-/* harmony import */ var _Template_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Template.js */ "./src/js/views/Template.js");
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom.js */ "./src/js/utils/dom.js");
+/* harmony import */ var _utils_event_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/event.js */ "./src/js/utils/event.js");
+/* harmony import */ var _Template_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Template.js */ "./src/js/views/Template.js");
+
 
 
 
@@ -1352,24 +1523,24 @@ var SearchResultView = /*#__PURE__*/function () {
   function SearchResultView() {
     var _this = this;
 
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, SearchResultView);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SearchResultView);
 
-    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.modal-container');
-    this.$videoList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-list', this.$modalContainer);
-    this.$searchTarget = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-target', this.$modalContainer);
-    this.$searchNoResult = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('#search-no-result', this.$modalContainer);
-    this.template = new _Template_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.$modalContainer = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.modal-container');
+    this.$videoList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-list', this.$modalContainer);
+    this.$searchTarget = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-target', this.$modalContainer);
+    this.$searchNoResult = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#search-no-result', this.$modalContainer);
+    this.template = new _Template_js__WEBPACK_IMPORTED_MODULE_5__["default"]();
     this.observer = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
-        (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.emit)(_this.$searchTarget, '@scroll-bottom');
+        (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(_this.$searchTarget, '@scroll-bottom');
       }
     }, {
       root: this.$videoList,
-      threshold: 1.0
+      threshold: 1
     });
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(SearchResultView, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SearchResultView, [{
     key: "renderVideo",
     value: function renderVideo(newVideoItems) {
       var _this2 = this;
@@ -1379,18 +1550,24 @@ var SearchResultView = /*#__PURE__*/function () {
         this.deleteSkeleton(haveToDeleteSkeletonCount);
       }
 
-      this.$videoItems = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$$)('.skeleton');
+      this.$videoItems = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$$)('.skeleton');
       this.$videoItems.forEach(function ($item, idx) {
+        var _newVideoItems$idx$pu = newVideoItems[idx].publishTime.substr(0, 10).split('-'),
+            _newVideoItems$idx$pu2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_newVideoItems$idx$pu, 3),
+            year = _newVideoItems$idx$pu2[0],
+            month = _newVideoItems$idx$pu2[1],
+            day = _newVideoItems$idx$pu2[2];
+
         $item.classList.remove('skeleton');
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__thumbnail', $item).setAttribute('srcdoc', _this2.template.getThumbnail(newVideoItems[idx].thumbnailUrl, newVideoItems[idx].videoId));
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__title', $item).innerText = newVideoItems[idx].title;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__channel-name', $item).innerText = newVideoItems[idx].channelTitle;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__published-date', $item).innerText = newVideoItems[idx].publishTime;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).innerText = newVideoItems[idx].saved ? '저장됨' : '⬇ 저장';
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).classList.add(newVideoItems[idx].saved ? 'saved-button' : 'button');
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).disabled = newVideoItems[idx].saved;
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).addEventListener('click', _this2.handleSaveButton.bind(_this2));
-        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_2__.$)('.video-item__save-button', $item).dataset.id = newVideoItems[idx].videoId;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__thumbnail', $item).setAttribute('srcdoc', _this2.template.getThumbnail(newVideoItems[idx].thumbnailUrl, newVideoItems[idx].videoId));
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__title', $item).innerText = newVideoItems[idx].title;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__channel-name', $item).innerText = newVideoItems[idx].channelTitle;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__published-date', $item).innerText = "".concat(year, "\uB144 ").concat(month, "\uC6D4 ").concat(day, "\uC77C");
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).innerText = newVideoItems[idx].saved ? '저장됨' : '⬇ 저장';
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).classList.add(newVideoItems[idx].saved ? 'saved-button' : 'button');
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).disabled = newVideoItems[idx].saved;
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).addEventListener('click', _this2.handleSaveButton.bind(_this2));
+        (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.video-item__save-button', $item).dataset.id = newVideoItems[idx].videoId;
       });
     }
   }, {
@@ -1398,7 +1575,7 @@ var SearchResultView = /*#__PURE__*/function () {
     value: function handleSaveButton(event) {
       var savedId = event.target.dataset.id;
       var buttonElement = event.target;
-      (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_3__.emit)(this.$searchTarget, '@save-video', {
+      (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.emit)(this.$searchTarget, '@save-video', {
         savedId: savedId,
         buttonElement: buttonElement
       });
@@ -1475,17 +1652,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Template)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
 
 
 
 var Template = /*#__PURE__*/function () {
   function Template() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Template);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Template);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Template, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Template, [{
     key: "getThumbnail",
     value: function getThumbnail(imgUrl, videoId) {
       return "\n      <style>\n        * {\n          margin: 0;\n          padding: 0;\n          overflow: hidden;\n        }\n\n        body {\n          position: relative; \n        }\n\n        img {\n          object-fit: cover;\n          width: 100%;\n          height: 135px;\n        }\n\n        .play { \n          position: absolute; \n          top: 30%;\n          left: 37%;\n          background: gray;\n          border-radius: 50% / 10%;\n          color: #FFFFFF;\n          font-size: 1em; /* change this to change size */\n          height: 3em;\n          padding: 0;\n          text-align: center;\n          text-indent: 0.1em;\n          transition: all 150ms ease-out;\n          width: 4em;\n        }\n\n        .play:hover {\n          background: red;\n        }\n\n        .play::before { \n          background: inherit;\n          border-radius: 5% / 50%;\n          bottom: 9%;\n          content: '';\n          left: -5%;\n          position: absolute;\n          right: -5%;\n          top: 9%;\n        }\n\n        .play::after {\n          border-style: solid;\n          border-width: 1em 0 1em 1.732em;\n          border-color: transparent transparent transparent rgba(255, 255, 255, 0.75);\n          content: ' ';\n          font-size: 0.75em;\n          height: 0;\n          margin: -1em 0 0 -0.75em;\n          top: 50%;\n          position: absolute;\n          width: 0;\n        }\n\n      </style>\n      <a href='https://www.youtube.com/embed/".concat(videoId, "?autoplay=1&mute=1'>\n      <img src=").concat(imgUrl, ">\n        <div class='play'></div>\n      </a>\n    ");
@@ -1493,12 +1672,23 @@ var Template = /*#__PURE__*/function () {
   }, {
     key: "getSkeleton",
     value: function getSkeleton() {
-      return "\n      <li class=\"video-item skeleton\" data-video-id=\"\">\n        <iframe \n          class=\"video-item__thumbnail\" \n          srcdoc=\"\" \n          frameborder=\"0\"\n          allow=\"autoplay\"\n          allowfullscreen>\n        </iframe>\n        <h4 class=\"video-item__title\"></h4>\n        <p class=\"video-item__channel-name\"></p>\n        <p class=\"video-item__published-date\"></p>\n        <button data-id=\"\" class=\"video-item__save-button button\"></button>\n      </li>\n    ".repeat(10);
+      return "\n      <li class=\"video-item skeleton\" data-video-id=\"\">\n        <iframe \n          class=\"video-item__thumbnail\" \n          srcdoc=\"\" \n          frameborder=\"0\"\n          allow=\"autoplay\"\n          allowfullscreen>\n        </iframe>\n        <h4 class=\"video-item__title\"></h4>\n        <p class=\"video-item__channel-name\"></p>\n        <p class=\"video-item__published-date\"></p>\n        <button class=\"video-item__save-button button\"></button>\n      </li>\n    ".repeat(10);
     }
   }, {
     key: "getNotFound",
     value: function getNotFound() {
       return "\n    <section class=\"search-result search-result--no-result\">\n        <h3 hidden>\uAC80\uC0C9 \uACB0\uACFC \uC5C6\uC74C</h3>\n        <div class=\"no-result\">\n          <img src=\"./src/assets/images/not_found.png\" alt=\"no result image\" class=\"no-result__image\">\n          <p class=\"no-result__description\">\n            \uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4<br />\n            \uB2E4\uB978 \uD0A4\uC6CC\uB4DC\uB85C \uAC80\uC0C9\uD574\uBCF4\uC138\uC694\n          </p>\n        </div>\n      </section>\n    ";
+    }
+  }, {
+    key: "getSavedVideo",
+    value: function getSavedVideo(savedVideo) {
+      var _savedVideo$publishTi = savedVideo.publishTime.substr(0, 10).split('-'),
+          _savedVideo$publishTi2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_savedVideo$publishTi, 3),
+          year = _savedVideo$publishTi2[0],
+          month = _savedVideo$publishTi2[1],
+          day = _savedVideo$publishTi2[2];
+
+      return "\n      <li class=\"video-item\" data-video-id=".concat(savedVideo.videoId, ">\n          <iframe \n            class=\"video-item__thumbnail\" \n            srcdoc=\"").concat(this.getThumbnail(savedVideo.thumbnailUrl, savedVideo.videoId), "\"\n            frameborder=\"0\"\n            allow=\"autoplay\"\n            allowfullscreen>\n          </iframe>\n          <h4 class=\"video-item__title\">").concat(savedVideo.title, "</h4>\n          <p class=\"video-item__channel-name\">").concat(savedVideo.channelTitle, "</p>\n          <p class=\"video-item__published-date\">").concat(year, "\uB144 ").concat(month, "\uC6D4 ").concat(day, "\uC77C</p>\n          <div class=\"user-button-wrapper\">\n            <button class=\"user-saw-button\">\u2705</button>\n            <button class=\"user-delete-button\">\uD83D\uDDD1\uFE0F</button>\n          </div>\n      </li>\n    ");
     }
   }]);
 
@@ -1529,7 +1719,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 0;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: center;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,eAAe;IACf,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,uBAAuB;AAC3B;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,wBAAwB;IACxB,iBAAiB;IACjB,aAAa;AACjB","sourcesContent":["body {\n    padding: 64px 0;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: center;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,qCAAqC;IACrC,8BAA8B;AAClC;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,qCAAqC;IACrC,8BAA8B;IAC9B,yBAAyB;AAC7B;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,wBAAwB;IACxB,iBAAiB;IACjB,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,yBAAyB;AAC7B;;AAEA;;IAEI,WAAW;IACX,YAAY;IACZ,gBAAgB;IAChB,mBAAmB;IACnB,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,iBAAiB;AACrB;;AAEA;;IAEI,mBAAmB;IACnB,8BAA8B;AAClC;;AAEA;;IAEI,aAAa;IACb,uBAAuB;IACvB,uCAAuC;IACvC,yBAAyB;IACzB,QAAQ;AACZ;;AAEA;IACI;QACI,2CAA2C;IAC/C;IACA;QACI,2CAA2C;IAC/C;IACA;QACI,8CAA8C;IAClD;IACA;QACI,4CAA4C;IAChD;IACA;QACI,6CAA6C;IACjD;AACJ;;AAEA;IACI;;QAEI,uCAAuC;;IAE3C;AACJ;AACA;IACI;;QAEI,uCAAuC;IAC3C;AACJ;AACA;IACI;;QAEI,4BAA4B;IAChC;AACJ","sourcesContent":["body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2969,6 +3159,23 @@ function _arrayLikeToArray(arr, len) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _arrayWithHoles)
+/* harmony export */ });
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js ***!
@@ -3217,6 +3424,66 @@ function _iterableToArray(iter) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _iterableToArrayLimit)
+/* harmony export */ });
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+
+  var _s, _e;
+
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _nonIterableRest)
+/* harmony export */ });
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js ***!
@@ -3230,6 +3497,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _slicedToArray)
+/* harmony export */ });
+/* harmony import */ var _arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayWithHoles.js */ "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js");
+/* harmony import */ var _iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./iterableToArrayLimit.js */ "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js");
+/* harmony import */ var _unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js");
+/* harmony import */ var _nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./nonIterableRest.js */ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js");
+
+
+
+
+function _slicedToArray(arr, i) {
+  return (0,_arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(arr) || (0,_iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arr, i) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(arr, i) || (0,_nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
 }
 
 /***/ }),
