@@ -303,6 +303,7 @@ function _closeModal2() {
 function _deleteVideo2(event) {
   if ((0,_utils_validator_js__WEBPACK_IMPORTED_MODULE_5__.checkAnswerYes)()) {
     this.video.deleteVideo(event.detail.deleteVideoId);
+    this.video.updateItemsLocalStorage();
     this.appView.renderSavedVideo(this.video.getItemsLocalStorage());
   }
 }
@@ -920,7 +921,6 @@ var VideoModel = /*#__PURE__*/function () {
         if ((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)[idx].videoId === deleteVideoId) {
           (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).splice(idx, 1);
 
-          this.updateItemsLocalStorage();
           return;
         }
       }
@@ -1249,9 +1249,10 @@ var AppView = /*#__PURE__*/function () {
     this.$willSeeButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#will-see-button');
     this.$sawButton = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#saw-button');
     this.$willSeeWrapper = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.will-see-wrapper');
-    this.$isEmpty = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.is-empty', this.$willSeeWrapper);
+    this.$isEmptyWillSee = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.is-empty-will-see', this.$willSeeWrapper);
     this.$willSeeList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#will-see-list', this.$willSeeWrapper);
     this.$sawWrapper = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.saw-wrapper');
+    this.$isEmptySaw = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('.is-empty-saw', this.$sawWrapper);
     this.$sawList = (0,_utils_dom_js__WEBPACK_IMPORTED_MODULE_3__.$)('#saw-list', this.$sawWrapper);
 
     _classPrivateMethodGet(this, _bindEvents, _bindEvents2).call(this);
@@ -1260,12 +1261,14 @@ var AppView = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(AppView, [{
     key: "renderSavedVideo",
     value: function renderSavedVideo(savedVideos) {
-      if (savedVideos.length === 0) {
-        this.$isEmpty.classList.remove('hide');
-      }
-
       this.$willSeeList.replaceChildren();
       this.$sawList.replaceChildren();
+
+      if (savedVideos.length === 0) {
+        this.$isEmptyWillSee.classList.remove('hide');
+        this.$isEmptySaw.classList.remove('hide');
+        return;
+      }
 
       var _iterator = _createForOfIteratorHelper(savedVideos),
           _step;
@@ -1275,16 +1278,26 @@ var AppView = /*#__PURE__*/function () {
           var video = _step.value;
 
           if (video.saw) {
+            this.$isEmptySaw.classList.add('hide');
             this.$sawList.insertAdjacentHTML('beforeend', this.template.getSavedVideo(video));
             continue;
           }
 
+          this.$isEmptyWillSee.classList.add('hide');
           this.$willSeeList.insertAdjacentHTML('beforeend', this.template.getSavedVideo(video));
         }
       } catch (err) {
         _iterator.e(err);
       } finally {
         _iterator.f();
+      }
+
+      if (this.$willSeeList.childElementCount === 0) {
+        this.$isEmptyWillSee.classList.remove('hide');
+      }
+
+      if (this.$sawList.childElementCount === 0) {
+        this.$isEmptySaw.classList.remove('hide');
       }
     }
   }]);
@@ -1719,7 +1732,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,qCAAqC;IACrC,8BAA8B;AAClC;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,qCAAqC;IACrC,8BAA8B;IAC9B,yBAAyB;AAC7B;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,wBAAwB;IACxB,iBAAiB;IACjB,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,yBAAyB;AAC7B;;AAEA;;IAEI,WAAW;IACX,YAAY;IACZ,gBAAgB;IAChB,mBAAmB;IACnB,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,iBAAiB;AACrB;;AAEA;;IAEI,mBAAmB;IACnB,8BAA8B;AAClC;;AAEA;;IAEI,aAAa;IACb,uBAAuB;IACvB,uCAAuC;IACvC,yBAAyB;IACzB,QAAQ;AACZ;;AAEA;IACI;QACI,2CAA2C;IAC/C;IACA;QACI,2CAA2C;IAC/C;IACA;QACI,8CAA8C;IAClD;IACA;QACI,4CAA4C;IAChD;IACA;QACI,6CAA6C;IACjD;AACJ;;AAEA;IACI;;QAEI,uCAAuC;;IAE3C;AACJ;AACA;IACI;;QAEI,uCAAuC;IAC3C;AACJ;AACA;IACI;;QAEI,4BAA4B;IAChC;AACJ","sourcesContent":["body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,cAAc;IACd,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,qCAAqC;IACrC,8BAA8B;AAClC;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,qCAAqC;IACrC,8BAA8B;IAC9B,yBAAyB;AAC7B;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,wBAAwB;IACxB,iBAAiB;IACjB,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,yBAAyB;AAC7B;;AAEA;;IAEI,WAAW;IACX,YAAY;IACZ,gBAAgB;IAChB,mBAAmB;IACnB,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,iBAAiB;AACrB;;AAEA;;IAEI,mBAAmB;IACnB,8BAA8B;AAClC;;AAEA;;IAEI,aAAa;IACb,uBAAuB;IACvB,uCAAuC;IACvC,yBAAyB;IACzB,QAAQ;AACZ;;AAEA;IACI;QACI,2CAA2C;IAC/C;IACA;QACI,2CAA2C;IAC/C;IACA;QACI,8CAA8C;IAClD;IACA;QACI,4CAA4C;IAChD;IACA;QACI,6CAA6C;IACjD;AACJ;;AAEA;IACI;;QAEI,uCAAuC;;IAE3C;AACJ;AACA;IACI;;QAEI,uCAAuC;IAC3C;AACJ;AACA;IACI;;QAEI,4BAA4B;IAChC;AACJ","sourcesContent":["body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid rgba(0, 0, 0, 0.12);\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: rgba(0, 188, 212, 0.12);\n}\n\n.clicked:hover {\n    background-color: rgba(0, 188, 212, 0.15);\n}\n\n.bottom-target {\n    /* visibility: hidden; */\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: #F9F9F9;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: #F0F0F0;\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1987,6 +2000,21 @@ module.exports = function (item) {
 
   return [content].join("\n");
 };
+
+/***/ }),
+
+/***/ "./src/assets/images/empty.png":
+/*!*************************************!*\
+  !*** ./src/assets/images/empty.png ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "empty.png");
 
 /***/ }),
 
@@ -3685,11 +3713,13 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/index.css */ "./src/css/index.css");
 /* harmony import */ var _assets_images_not_found_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/images/not_found.png */ "./src/assets/images/not_found.png");
-/* harmony import */ var _Controller_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Controller.js */ "./src/js/Controller.js");
+/* harmony import */ var _assets_images_empty_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/images/empty.png */ "./src/assets/images/empty.png");
+/* harmony import */ var _Controller_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Controller.js */ "./src/js/Controller.js");
 
 
 
-window.addEventListener('DOMContentLoaded', new _Controller_js__WEBPACK_IMPORTED_MODULE_2__["default"]());
+
+window.addEventListener('DOMContentLoaded', new _Controller_js__WEBPACK_IMPORTED_MODULE_3__["default"]());
 })();
 
 /******/ })()
