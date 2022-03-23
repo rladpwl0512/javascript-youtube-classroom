@@ -28,7 +28,8 @@ var EXCEPTION = Object.freeze({
   NOT_FOUND_ERROR_MESSAGE: '검색된 결과가 없습니다. 다른 검색어를 입력해주세요.',
   EXCEED_LIMIT_ERROR_MESSAGE: '저장된 영상의 개수가 100개를 초과하여 저장되지 않았습니다. 100개 이하의 영상만 저장해주세요.',
   VIDEO_IS_NONE_ERROR_MESSAGE: '영상의 개수가 10개 미만입니다. 영상이 더이상 없습니다.',
-  DELETE_CONFIRM_MESSAGE: '정말 지우시겠습니까? 지우고 싶으면 "확인"을 클릭하세요.'
+  DELETE_CONFIRM_MESSAGE: '정말 지우시겠습니까? 지우고 싶으면 "확인"을 클릭하세요.',
+  API_IS_EMPTY: 'API가 초과되었습니다. 개발자에게 문의하세요.'
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EXCEPTION);
 
@@ -50,6 +51,29 @@ var KEYCODE = Object.freeze({
   ESC: 27
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (KEYCODE);
+
+/***/ }),
+
+/***/ "./src/constants/server.js":
+/*!*********************************!*\
+  !*** ./src/constants/server.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var SERVER = Object.freeze({
+  REDIRECT_HOST1: 'https://thirsty-ritchie-0c8419.netlify.app/',
+  REDIRECT_HOST2: 'https://upbeat-payne-6f096c.netlify.app/',
+  REDIRECT_HOST3: 'https://priceless-euclid-bf53ed.netlify.app/',
+  REDIRECT_HOST4: 'https://zealous-swartz-f699df.netlify.app/',
+  REDIRECT_HOST5: 'https://stupefied-turing-eea71d.netlify.app/',
+  REDIRECT_HOST6: 'https://festive-pare-09e68a.netlify.app/'
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SERVER);
 
 /***/ }),
 
@@ -151,7 +175,7 @@ var Controller = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMP
   this.appView = new _views_AppView_js__WEBPACK_IMPORTED_MODULE_6__["default"]();
   this.searchInputView = new _views_SearchInputView_js__WEBPACK_IMPORTED_MODULE_7__["default"]();
   this.searchResultView = new _views_SearchResultView_js__WEBPACK_IMPORTED_MODULE_8__["default"]();
-  this.SearchCloseView = new _views_SearchCloseView_js__WEBPACK_IMPORTED_MODULE_9__["default"]();
+  this.searchCloseView = new _views_SearchCloseView_js__WEBPACK_IMPORTED_MODULE_9__["default"]();
   this.videoModel.savedVideoItems = this.videoModel.getItemsLocalStorage();
   this.appView.renderSavedVideo(this.videoModel.getItemsLocalStorage());
 
@@ -164,7 +188,7 @@ function _subscribeViewEvents2() {
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchInputView.$searchButton, '@search', _classPrivateMethodGet(this, _searchVideo, _searchVideo2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@scroll-bottom', _classPrivateMethodGet(this, _scrollNextVideos, _scrollNextVideos2).bind(this));
   (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchResultView.$searchTarget, '@save-video', _classPrivateMethodGet(this, _saveVideo, _saveVideo2).bind(this));
-  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.SearchCloseView.$closeButton, '@close-modal', _classPrivateMethodGet(this, _closeModal, _closeModal2).bind(this));
+  (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_4__.on)(this.searchCloseView.$closeButton, '@close-modal', _classPrivateMethodGet(this, _closeModal, _closeModal2).bind(this));
 }
 
 function _searchVideo2(_x) {
@@ -761,6 +785,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _utils_validator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/validator */ "./src/js/utils/validator.js");
+/* harmony import */ var _constants_server_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../constants/server.js */ "./src/constants/server.js");
 
 
 
@@ -778,6 +803,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
 
 
 
@@ -879,28 +905,22 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "setItemsLocalStorage",
     value: function setItemsLocalStorage(savedId) {
-      var _iterator = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _allVideoItems)),
-          _step;
+      var _this = this;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var item = _step.value;
+      (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _allVideoItems).some(function (item) {
+        console.log('도는중');
 
-          if (item.videoId === savedId) {
-            item.saved = true;
-            var allSavedVideoItems = [].concat((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)), [item]);
+        if (item.videoId === savedId) {
+          item.saved = true;
+          var allSavedVideoItems = [].concat((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(_this, _savedVideoItems)), [item]);
 
-            (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _savedVideoItems, allSavedVideoItems);
+          (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(_this, _savedVideoItems, allSavedVideoItems);
 
-            localStorage.setItem('saved-video', JSON.stringify(allSavedVideoItems));
-            return;
-          }
+          localStorage.setItem('saved-video', JSON.stringify(allSavedVideoItems));
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
+
+        return item.videoId === savedId;
+      });
     }
   }, {
     key: "getItemsLocalStorage",
@@ -917,25 +937,29 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "deleteVideo",
     value: function deleteVideo(deleteVideoId) {
-      for (var idx = 0; idx < (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).length; idx += 1) {
-        if ((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)[idx].videoId === deleteVideoId) {
-          (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).splice(idx, 1);
+      var _this2 = this;
 
-          return;
+      (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems).some(function (item, idx) {
+        console.log('삭제');
+
+        if (item.videoId === deleteVideoId) {
+          (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(_this2, _savedVideoItems).splice(idx, 1);
         }
-      }
+
+        return item.videoId === deleteVideoId;
+      });
     }
   }, {
-    key: "IsIncludedSavedItem",
-    value: function IsIncludedSavedItem(newItem) {
+    key: "isIncludedSavedItem",
+    value: function isIncludedSavedItem(newItem) {
       var isfindSavedItem = false;
 
-      var _iterator2 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
-          _step2;
+      var _iterator = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var savedItem = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var savedItem = _step.value;
 
           if (newItem.videoId === savedItem.videoId) {
             isfindSavedItem = true;
@@ -943,9 +967,9 @@ var VideoModel = /*#__PURE__*/function () {
           }
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
 
       return isfindSavedItem || newItem;
@@ -953,10 +977,10 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "updateNewVideoItems",
     value: function updateNewVideoItems() {
-      var _this = this;
+      var _this3 = this;
 
       var updatedNewVideoItems = (0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _newVideoItems).map(function (newItem) {
-        return _this.IsIncludedSavedItem(newItem);
+        return _this3.isIncludedSavedItem(newItem);
       });
 
       if (updatedNewVideoItems.length) {
@@ -987,12 +1011,12 @@ var VideoModel = /*#__PURE__*/function () {
   }, {
     key: "updateSawAttribute",
     value: function updateSawAttribute(sawVideoId) {
-      var _iterator3 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
-          _step3;
+      var _iterator2 = _createForOfIteratorHelper((0,_babel_runtime_helpers_classPrivateFieldGet__WEBPACK_IMPORTED_MODULE_4__["default"])(this, _savedVideoItems)),
+          _step2;
 
       try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var video = _step3.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var video = _step2.value;
 
           if (video.videoId === sawVideoId) {
             video.saw = !video.saw;
@@ -1000,23 +1024,22 @@ var VideoModel = /*#__PURE__*/function () {
           }
         }
       } catch (err) {
-        _iterator3.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator3.f();
+        _iterator2.f();
       }
     }
   }, {
     key: "fetchYoutubeApi",
     value: function () {
       var _fetchYoutubeApi = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_6___default().mark(function _callee(query, nextPageToken) {
-        var REDIRECT_SERVER_HOST, url, parameters, response, body;
+        var url, parameters, response, body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_6___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                REDIRECT_SERVER_HOST = 'https://thirsty-ritchie-0c8419.netlify.app/';
-                url = new URL('youtube/v3/search', REDIRECT_SERVER_HOST);
+                url = new URL('youtube/v3/search', _constants_server_js__WEBPACK_IMPORTED_MODULE_8__["default"].REDIRECT_HOST2);
                 parameters = new URLSearchParams({
                   part: 'snippet',
                   type: 'video',
@@ -1027,43 +1050,43 @@ var VideoModel = /*#__PURE__*/function () {
                   q: query
                 });
                 url.search = parameters.toString();
-                _context.next = 7;
+                _context.next = 6;
                 return fetch(url, {
                   method: 'GET'
                 });
 
-              case 7:
+              case 6:
                 response = _context.sent;
-                _context.next = 10;
+                _context.next = 9;
                 return response.json();
 
-              case 10:
+              case 9:
                 body = _context.sent;
 
                 if (response.ok) {
-                  _context.next = 13;
+                  _context.next = 12;
                   break;
                 }
 
-                throw new Error(body.error.message);
+                throw new Error(response.status);
 
-              case 13:
+              case 12:
                 (0,_babel_runtime_helpers_classPrivateFieldSet__WEBPACK_IMPORTED_MODULE_5__["default"])(this, _fetchedVideos, body);
 
-                _context.next = 19;
+                _context.next = 18;
                 break;
 
-              case 16:
-                _context.prev = 16;
+              case 15:
+                _context.prev = 15;
                 _context.t0 = _context["catch"](0);
-                return _context.abrupt("return", _context.t0);
+                (0,_utils_validator__WEBPACK_IMPORTED_MODULE_7__.checkEmptyApi)(_context.t0);
 
-              case 19:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 16]]);
+        }, _callee, this, [[0, 15]]);
       }));
 
       function fetchYoutubeApi(_x, _x2) {
@@ -1139,6 +1162,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "checkAnswerYes": () => (/* binding */ checkAnswerYes),
 /* harmony export */   "checkEmpty": () => (/* binding */ checkEmpty),
+/* harmony export */   "checkEmptyApi": () => (/* binding */ checkEmptyApi),
 /* harmony export */   "checkExceedLimit": () => (/* binding */ checkExceedLimit),
 /* harmony export */   "checkLengthExist": () => (/* binding */ checkLengthExist),
 /* harmony export */   "checkVideoIsNone": () => (/* binding */ checkVideoIsNone)
@@ -1161,6 +1185,13 @@ var isLengthZero = function isLengthZero(target) {
 var checkEmpty = function checkEmpty(value) {
   if (isEmpty(value)) {
     throw new Error(_constants_exception__WEBPACK_IMPORTED_MODULE_0__["default"].EMPTY_ERROR_MESSAGE);
+  }
+};
+var checkEmptyApi = function checkEmptyApi(_ref) {
+  var message = _ref.message;
+
+  if (message === '403') {
+    alert(_constants_exception__WEBPACK_IMPORTED_MODULE_0__["default"].API_IS_EMPTY);
   }
 };
 var checkLengthExist = function checkLengthExist(value) {
@@ -1259,17 +1290,30 @@ var AppView = /*#__PURE__*/function () {
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(AppView, [{
-    key: "renderSavedVideo",
-    value: function renderSavedVideo(savedVideos) {
+    key: "resetSavedVideoList",
+    value: function resetSavedVideoList() {
       this.$willSeeList.replaceChildren();
       this.$sawList.replaceChildren();
-
-      if (savedVideos.length === 0) {
-        this.$isEmptyWillSee.classList.remove('hide');
-        this.$isEmptySaw.classList.remove('hide');
-        return;
-      }
-
+    }
+  }, {
+    key: "hideSavedVideoList",
+    value: function hideSavedVideoList() {
+      this.$isEmptyWillSee.classList.remove('hide');
+      this.$isEmptySaw.classList.remove('hide');
+    }
+  }, {
+    key: "showEmptyWillSeeList",
+    value: function showEmptyWillSeeList() {
+      this.$isEmptyWillSee.classList.remove('hide');
+    }
+  }, {
+    key: "showEmptySawList",
+    value: function showEmptySawList() {
+      this.$isEmptySaw.classList.remove('hide');
+    }
+  }, {
+    key: "inputSavedVideoList",
+    value: function inputSavedVideoList(savedVideos) {
       var _iterator = _createForOfIteratorHelper(savedVideos),
           _step;
 
@@ -1291,13 +1335,25 @@ var AppView = /*#__PURE__*/function () {
       } finally {
         _iterator.f();
       }
+    }
+  }, {
+    key: "renderSavedVideo",
+    value: function renderSavedVideo(savedVideos) {
+      this.resetSavedVideoList();
+
+      if (savedVideos.length === 0) {
+        this.hideSavedVideoList();
+        return;
+      }
+
+      this.inputSavedVideoList(savedVideos);
 
       if (this.$willSeeList.childElementCount === 0) {
-        this.$isEmptyWillSee.classList.remove('hide');
+        this.showEmptyWillSeeList();
       }
 
       if (this.$sawList.childElementCount === 0) {
-        this.$isEmptySaw.classList.remove('hide');
+        this.showEmptySawList();
       }
     }
   }]);
@@ -1334,7 +1390,7 @@ function _handleClickSawButton2() {
 function _handleClickUserButton2(_ref) {
   var target = _ref.target;
 
-  if (target.className === 'user-delete-button') {
+  if (target.classList.contains('user-delete-button')) {
     var deleteVideoId = target.closest('li').dataset.videoId;
     (0,_utils_event_js__WEBPACK_IMPORTED_MODULE_2__.emit)(this.$willSeeWrapper, '@delete-video', {
       deleteVideoId: deleteVideoId
@@ -1732,7 +1788,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid var(--gray-border);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid var(--gray-border);;\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: var( --nav-clicked);\n}\n\n.clicked:hover {\n    background-color: var(--nav-clicked-hover);\n}\n\n.bottom-target {\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: var(--user-button);\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: var(--user-button-hover);\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,cAAc;IACd,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,oCAAoC;IACpC,8BAA8B;AAClC;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,oCAAoC;IACpC,8BAA8B;IAC9B,yBAAyB;AAC7B;;AAEA;IACI,qCAAqC;AACzC;;AAEA;IACI,0CAA0C;AAC9C;;AAEA;IACI,iBAAiB;IACjB,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,yBAAyB;AAC7B;;AAEA;;IAEI,WAAW;IACX,YAAY;IACZ,gBAAgB;IAChB,8BAA8B;IAC9B,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,iBAAiB;AACrB;;AAEA;;IAEI,oCAAoC;IACpC,8BAA8B;AAClC;;AAEA;;IAEI,aAAa;IACb,uBAAuB;IACvB,uCAAuC;IACvC,yBAAyB;IACzB,QAAQ;AACZ;;AAEA;IACI;QACI,2CAA2C;IAC/C;IACA;QACI,2CAA2C;IAC/C;IACA;QACI,8CAA8C;IAClD;IACA;QACI,4CAA4C;IAChD;IACA;QACI,6CAA6C;IACjD;AACJ;;AAEA;IACI;;QAEI,uCAAuC;;IAE3C;AACJ;AACA;IACI;;QAEI,uCAAuC;IAC3C;AACJ;AACA;IACI;;QAEI,4BAA4B;IAChC;AACJ","sourcesContent":["body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid var(--gray-border);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid var(--gray-border);;\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: var( --nav-clicked);\n}\n\n.clicked:hover {\n    background-color: var(--nav-clicked-hover);\n}\n\n.bottom-target {\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: var(--user-button);\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: var(--user-button-hover);\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid var(--gray-border);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid var(--gray-border);;\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: var( --nav-clicked);\n}\n\n.clicked:hover {\n    background-color: var(--nav-clicked-hover);\n}\n\n.bottom-target {\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: var(--user-button);\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: var(--user-button-hover);\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}\n", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,4BAA4B;AAChC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,cAAc;IACd,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,oCAAoC;IACpC,8BAA8B;AAClC;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,oCAAoC;IACpC,8BAA8B;IAC9B,yBAAyB;AAC7B;;AAEA;IACI,qCAAqC;AACzC;;AAEA;IACI,0CAA0C;AAC9C;;AAEA;IACI,iBAAiB;IACjB,aAAa;AACjB;;AAEA;IACI,aAAa;IACb,yBAAyB;AAC7B;;AAEA;;IAEI,WAAW;IACX,YAAY;IACZ,gBAAgB;IAChB,8BAA8B;IAC9B,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,iBAAiB;AACrB;;AAEA;;IAEI,oCAAoC;IACpC,8BAA8B;AAClC;;AAEA;;IAEI,aAAa;IACb,uBAAuB;IACvB,uCAAuC;IACvC,yBAAyB;IACzB,QAAQ;AACZ;;AAEA;IACI;QACI,2CAA2C;IAC/C;IACA;QACI,2CAA2C;IAC/C;IACA;QACI,8CAA8C;IAClD;IACA;QACI,4CAA4C;IAChD;IACA;QACI,6CAA6C;IACjD;AACJ;;AAEA;IACI;;QAEI,uCAAuC;;IAE3C;AACJ;AACA;IACI;;QAEI,uCAAuC;IAC3C;AACJ;AACA;IACI;;QAEI,4BAA4B;IAChC;AACJ","sourcesContent":["body {\n    padding: 64px 50px;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 50px;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background-color: var(--nav);\n}\n\n.nav__button:hover {\n    background-color: var(--nav-hover);\n}\n\n.empty-img {\n    width: 300px;\n    display: block;\n    margin: 0 auto;\n}\n\nh2  {\n    text-align: center;\n    margin-top: 20px;\n}\n\n#will-see-button {\n    width: 118px;\n    border: 1px solid var(--gray-border);\n    border-radius: 4px 0px 0px 4px;\n}\n\n#saw-button {\n    width: 118px;\n    margin-left: -5px;\n    border: 1px solid var(--gray-border);;\n    border-radius: 0px 4px 4px 0px;\n    border-collapse: collapse;\n}\n\n.clicked {\n    background-color: var( --nav-clicked);\n}\n\n.clicked:hover {\n    background-color: var(--nav-clicked-hover);\n}\n\n.bottom-target {\n    margin-top: 100px;\n    height: 100px;       \n}\n\n.user-button-wrapper {\n    display: flex;\n    justify-content: flex-end;\n}\n\n.user-saw-button, \n.user-delete-button {\n    width: 36px;\n    height: 36px;\n    padding: 6px 2px;\n    background: var(--user-button);\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    margin-left: 10px;\n}\n\n.user-saw-button:hover, \n.user-delete-button:hover {\n    background: var(--user-button-hover);\n    animation: shake 0.6s infinite;\n}\n\n#will-see-list, \n#saw-list {\n    display: grid;\n    justify-content: center;\n    grid-template-columns: repeat(4, 240px);\n    grid-template-rows: 255px;\n    gap: 1em;\n}\n\n@keyframes shake {\n    0% {\n        transform: translate(0px, 0px) rotate(0deg);\n    }\n    25% {\n        transform: translate(1px, 1px) rotate(1deg);\n    }\n    50% {\n        transform: translate(-1px, -1px) rotate(-1deg);\n    }\n    75% {\n        transform: translate(2px, -1px) rotate(2deg);\n    }\n    100% {\n        transform: translate(-1px, 1px) rotate(-1deg);\n    }\n}\n\n@media (min-width: 960px) and (max-width: 1279px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(3, 240px);\n\n    }\n}\n@media (min-width: 600px) and (max-width: 959px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: repeat(2, 240px);\n    }\n}\n@media screen and (max-width: 599px) {\n    #will-see-list, \n    #saw-list {\n        grid-template-columns: 240px;\n    }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
